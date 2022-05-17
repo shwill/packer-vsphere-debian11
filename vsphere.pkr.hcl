@@ -1,15 +1,3 @@
-
-variable "vsphere_deployment_username" {
-  type    = string 
-  default = "deploy@vsphere.local"
-}
-
-variable "vsphere_deployment_password" {
-  type    = string
-  default = "C0mplex!" 
-  sensitive = true
-}
-
 variable "vsphere_vcenter"  {
   type    = string
   default = "vi.infra.risewi.de"

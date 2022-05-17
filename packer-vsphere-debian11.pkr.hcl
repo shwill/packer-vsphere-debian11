@@ -58,8 +58,6 @@ variable "datastore" {
   default = "AFF"
 }
 
-
-
 /* *********************************************************
  * vSphere ISO parameters 
  * *********************************************************
@@ -75,7 +73,6 @@ source "vsphere-iso" "debian" {
   
   // Linux guest customization does not work with debian11_64Guest, ref: https://kb.vmware.com/s/article/85845
   // guest_os_type        = "debian11_64Guest"
-  // guest_os_type        = "otherGuest64" funktioniert nicht
   guest_os_type        = "otherLinux64Guest"
 
 
@@ -105,8 +102,9 @@ source "vsphere-iso" "debian" {
     network = var.portgroup
   }
 
-  ssh_username= var.ssh_username
-  ssh_password = var.ssh_password
+  //
+  ssh_username= var.credentials_ssh_username
+  ssh_password = var.credentials_ssh_password
 
   storage {
     disk_size             = 32768
@@ -115,8 +113,8 @@ source "vsphere-iso" "debian" {
 
   ip_wait_address = var.network
 
-  username       = var.vsphere_deployment_username
-  password       = var.vsphere_deployment_password
+  username       = var.credentials_vsphere_username
+  password       = var.credentials_vsphere_password
   vcenter_server = var.vsphere_vcenter
 
   cluster        = var.vsphere_cluster
