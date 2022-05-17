@@ -75,6 +75,7 @@ source "vsphere-iso" "debian" {
   // guest_os_type        = "debian11_64Guest"
   guest_os_type        = "otherLinux64Guest"
 
+  iso_paths            = ["[AFF] _iso/debian-11.3.0-amd64-netinst.iso"]
 
   // Directory that is served via Packer's webserver
   http_directory       = path.root
@@ -92,31 +93,32 @@ source "vsphere-iso" "debian" {
     "vga=788 noprompt quiet --<enter>"
   ]
 
-  // recommended setting by vsphere
-  disk_controller_type = ["pvscsi"]
   
-  insecure_connection  = var.vsphere_allow_insecure_connection
-  iso_paths            = ["[AFF] _iso/debian-11.3.0-amd64-netinst.iso"]
   network_adapters {
     network_card = "vmxnet3"
     network = var.portgroup
   }
 
-  //
-  ssh_username= var.credentials_ssh_username
-  ssh_password = var.credentials_ssh_password
-
+  // disc configuration
+  disk_controller_type = ["pvscsi"]
   storage {
     disk_size             = 32768
     disk_thin_provisioned = true
   }
 
+  // configuring the SSH communicator
+  ssh_username= var.credentials_ssh_username
+  ssh_password = var.credentials_ssh_password
+
+  // Packer waits for an IP address to come online before continuing
+  // from the network range specified here (CIDR notation)
   ip_wait_address = var.network
 
+  // vSphere environment configuration
+  insecure_connection  = var.vsphere_allow_insecure_connection
+  vcenter_server = var.vsphere_vcenter
   username       = var.credentials_vsphere_username
   password       = var.credentials_vsphere_password
-  vcenter_server = var.vsphere_vcenter
-
   cluster        = var.vsphere_cluster
   host           = var.vsphere_target_esx_host
   datastore      = var.datastore
